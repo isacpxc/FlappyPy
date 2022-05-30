@@ -14,5 +14,5 @@ IMAGENS_PASSARO = [ # this is a list in python
     pygame.transform.scale2x(pygame.image.load(os.path.join('imgs', 'bird3.png'))),
 ];
 
-pygame.font.init(); # initialize font type of text that will be use
+pygame.font.init(); # initialize font type of text that will be used
 FONTE_PONTOS = pygame.font.SysFont('arial', 50);
