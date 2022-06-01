@@ -55,7 +55,7 @@ class Passaro:
 
         self.y += deslocamento
         # bird's angle
-        if deslocamento < 0 or self.y (self.altura + 50):  # if the bird's still above initical height before jump
+        if deslocamento < 0 or self.y (self.altura + 50):  # if the bird's still above initial height before jump
             if self.angulo < self.ROTACAO_MAXIMA:
                 self.angulo = self.ROTACAO_MAXIMA
         else:  # max = -90º
@@ -91,6 +91,7 @@ class Passaro:
 
     def get_mask(self):  # gets mask from bird's image
         pygame.mask.from_surface(self.imagem)
+
 
 
 
