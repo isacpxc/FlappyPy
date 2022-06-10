@@ -81,7 +81,7 @@ class Passaro:
         # if the bird is falling don't clap wings
         if self.angulo <= -80:
             self.imagem = self.IMGS[1]
-            self.contagem_imagem = self.TEMPO_ANIMACAO*2  # if is falling the next clap will be down(IMGS[2])
+            self.contagem_imagem = self.TEMPO_ANIMACAO*2  # if is falling, the next clap will be down(IMGS[2])
 
         # draw the image | this is how rotate image around the center with pygame
         imagem_rotacionada = pygame.transform.rotate(self.imagem, self.angulo)  # rotate image
@@ -93,6 +93,45 @@ class Passaro:
         pygame.mask.from_surface(self.imagem)
 
 
+class Cano:
+    # pass -> used as null statement, just as a placeholder
+    DISTANCIA = 200 # distance between pipes
+    VELOCIDADE = 5
 
+    def __init__(self, x): # just pass the x, because y is genenate randomly
+        self.x = x
+        self.altura = 0
+        self.pos_topo = 0 # top pipe -> axis y
+        self.pos_base = 0 # base pipe -> axis y
+        self.CANO_TOPO = pygame.transform.flip(IMAGEM_CANO, False, True)  # (image, flip axis x, flip axis y)
+        self.CANO_BASE = IMAGEM_CANO
+        self.passou = False # if the pipe pass the bird
+        self.definir_altura() # generate height of pipe
 
+    def definir_altura(self):
+        self.altura = random.randrange(50, 450) # range to prevent absurd pipe position on axis y
+        self.pos_topo = self.altura - self.CANO_TOPO.get_height()
+        self.pos_topo = self.altura + self.DISTANCIA
 
+    def mover(self):
+        self.x -= self.VELOCIDADE # negatively movement
+
+    def desenhar(self, tela):
+        tela.blit(self.CANO_TOP, (self.x, self.pos_topo))
+        tela.blit(self.CANO_BASE, (self.x, self.pos_base))
+
+    def colidir(self, passaro):
+        passaro_mask = passaro.get_mask()
+        topo_mask = pygame.mask.from_surface(self.CANO_TOPO)
+        base_mask = pygame.mask.from_surface(self.CANO_BASE)
+
+        distancia_topo = (self.x - passaro.x, self.pos_topo - round(passaro.y)) # x,y - round() because the numbers has to be integers
+        distancia_base = (self.x - passaro.x, self.pos_base - round(passaro.y))
+
+        topo_ponto = passaro_mask.overlap(topo_mask, distancia_base) # true or false | if there's a overlap or not
+        base_ponto = passaro_mask.overlap(base_mask, distancia_base)
+
+        if base_ponto or topo_ponto:
+            return True
+        else:
+            return False
